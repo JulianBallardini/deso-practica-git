@@ -78,9 +78,9 @@ public class ReservationService {
       ReservationDao reservationDao, Instant from, Instant to, int n)
       throws InvalidDateRangeException, DataAccessException {
         
-    if(from == null || to == null ) throw new InvalidDateRangeException('Al menos un extremo del rango es nulo');
+    if(from == null || to == null ) throw new InvalidDateRangeException("Al menos un extremo del rango es nulo");
     else{
-      if(from.isAfter(to))throw new InvalidDateRangeException('Rango imposible');
+      if(from.isAfter(to))throw new InvalidDateRangeException("Rango imposible");
     }
 
     List<Reservation> result = new ArrayList<>();
@@ -89,6 +89,10 @@ public class ReservationService {
     
     result = reservationDao.findByDateRange(from, to);
     result.sort(null);
+
+
+
+    return result;
   }
 
   // Ejercicio 5
