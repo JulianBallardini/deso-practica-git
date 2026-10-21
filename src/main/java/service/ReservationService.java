@@ -20,6 +20,7 @@ import util.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -87,8 +88,10 @@ public class ReservationService {
 
     if(n < 1)return result;
     
-    result = reservationDao.findByDateRange(from, to);
-    result.sort(null);
+    result = reservationDao.findByDateRange(from, to).stream()
+              .sorted(Comparator.comparingDouble(Reservation::calculatePrice).reversed())
+              .limit(n)
+              .toList();
 
 
 
