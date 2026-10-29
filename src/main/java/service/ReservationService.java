@@ -78,24 +78,21 @@ public class ReservationService {
   public List<Reservation> getTopNMostExpensive(
       ReservationDao reservationDao, Instant from, Instant to, int n)
       throws InvalidDateRangeException, DataAccessException {
-        
-    if(from == null || to == null ) throw new InvalidDateRangeException("Al menos un extremo del rango es nulo");
-    else{
-      if(from.isAfter(to))throw new InvalidDateRangeException("Rango imposible");
+    if (from == null || to == null) {
+      throw new InvalidDateRangeException("Al menos un extremo del rango es nulo");
+    }
+    if (from.isAfter(to)) {
+      throw new InvalidDateRangeException("Rango imposible");
     }
 
-    List<Reservation> result = new ArrayList<>();
+    if (n < 1) {
+      return new ArrayList<>();
+    }
 
-    if(n < 1)return result;
-    
-    result = reservationDao.findByDateRange(from, to).stream()
-              .sorted(Comparator.comparingDouble(Reservation::calculatePrice).reversed())
-              .limit(n)
-              .toList();
-
-
-
-    return result;
+    return reservationDao.findByDateRange(from, to).stream()
+        .sorted(Comparator.comparingDouble(Reservation::calculatePrice).reversed())
+        .limit(n)
+        .toList();
   }
 
   // Ejercicio 5

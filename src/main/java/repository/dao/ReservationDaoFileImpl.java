@@ -3,11 +3,8 @@ package repository.dao;
 import domain.Reservation;
 import exception.DataAccessException;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -62,6 +59,7 @@ public class ReservationDaoFileImpl implements ReservationDao {
     try {
       for (String line : Files.readAllLines(file.toPath())) {
         String[] p = line.split(",");
+        if (p.length < 4) continue;
         Instant date = Instant.parse(p[3].trim());
         if (!date.isBefore(from) && !date.isAfter(to)) {
           Reservation r = new Reservation();
