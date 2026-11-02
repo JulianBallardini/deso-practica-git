@@ -121,7 +121,22 @@ public class ReservationService {
       Reservation newReservation,
       ReservationDao reservationDao)
       throws DuplicateReservationException, DataAccessException {
-    throw new UnsupportedOperationException("Ejercicio 8: implement addReservationIfNotDuplicate");
+    String userId = newReservation.getOwner().getId();
+    String serviceId = newReservation.getService().getId();
+
+    boolean isDuplicate =
+        existingReservations.stream()
+            .anyMatch(
+                existing ->
+                    existing.getOwner().getId().equals(userId)
+                        && existing.getService().getId().equals(serviceId));
+
+    if (isDuplicate) {
+      throw new DuplicateReservationException(userId, serviceId);
+    }
+
+    reservationDao.save(newReservation);
+    return newReservation;
   }
 
   // Ejercicio 10
